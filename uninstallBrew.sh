@@ -21,32 +21,36 @@ function remove_eval() {
     # Identify the current shell and set the shell config file
     current_shell=$(basename "$SHELL")
     if [[ "$current_shell" == "bash" ]]; then
-        config_file=~/.bashrc
+        config_files=(~/.bashrc)
     elif [[ "$current_shell" == "zsh" ]]; then
-        config_file=~/.zprofile
+        config_files=(~/.zprofile)
     else
         echo "Unsupported shell. Exiting."
         exit 1
     fi
 
-    # Create a temporary file
-    temp_file=$(mktemp)
+    for config_file in "${config_files[@]}"; do
+      if [[ -f "$config_file" ]]; then
+          # Create a temporary file
+          temp_file=$(mktemp)
 
-    # Loop through the shell config file, excluding the line to remove and write the result to the temporary file
-    while IFS= read -r line; do
-    if [[ "$line" != "$line_to_remove" ]]; then
-        echo "$line" >> "$temp_file"
-    fi
-    done < "$config_file"
+          # Loop through the shell config file, excluding the line to remove and write the result to the temporary file
+          while IFS= read -r line; do
+              if [[ "$line" != "$line_to_remove" ]]; then
+                  echo "$line" >> "$temp_file"
+              fi
+          done < "$config_file"
 
-    # Replace the original shell config file with the modified temporary file
-    mv "$temp_file" "$config_file"
+          # Replace the original shell config file with the modified temporary file
+          mv "$temp_file" "$config_file"
 
-    # Set the file permissions
-    chmod 644 "$config_file"
+          # Set the file permissions
+          chmod 644 "$config_file"
 
-    # Print a message
-    echo "Line removed from $config_file"
+          # Print a message
+          echo "Line removed from $config_file"
+      fi
+    done
 }
 
 function shellCleanUp() {
