@@ -2,6 +2,7 @@
 
 # Function to check if brew is installed
 check_brew_installed() {
+  echo "PATH: $PATH"
   if command -v brew >/dev/null 2>&1; then
     echo "Homebrew is installed."
   else
