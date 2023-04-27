@@ -62,7 +62,7 @@ function main() {
         if [[ "$brew_path" == "/opt/homebrew" ]] || [[ "$brew_path" == "/usr/local" ]]; then
             echo 'Using the official Homebrew uninstall script'
             # Run the official Homebrew uninstall script
-            jamf policy -event uninstallBrewOfficial
+            /usr/local/bin/jamf policy -event uninstallBrewOfficial
             shellCleanUp
         else
             echo 'Using the custom Homebrew uninstall script'
