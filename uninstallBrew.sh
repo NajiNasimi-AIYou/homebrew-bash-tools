@@ -28,6 +28,7 @@ function shellCleanUp() {
                 sed -i.bak 's/eval "\$\(\/opt\/homebrew\/bin\/brew shellenv\)"//g' $file
                 sed -i.bak '/HOMEBREW_CASK_OPTS/d' $file
                 sed -i.bak '/PATH.*homebrew/d' $file
+                cat $file
             fi
         done
     elif [[ "$SHELL" == *"zsh"* ]]; then
@@ -42,6 +43,7 @@ function shellCleanUp() {
                 sed -i.bak 's/eval "\$\(\/opt\/homebrew\/bin\/brew shellenv\)"//g' $file
                 sed -i.bak '/HOMEBREW_CASK_OPTS/d' $file
                 sed -i.bak '/PATH.*homebrew/d' $file
+                cat $file
             fi
         done
     else
@@ -62,8 +64,9 @@ function main() {
         if [[ "$brew_path" == "/opt/homebrew" ]] || [[ "$brew_path" == "/usr/local" ]]; then
             echo 'Using the official Homebrew uninstall script'
             # Run the official Homebrew uninstall script
-            /usr/local/bin/jamf policy -event uninstallBrewOfficial
+            echo "must use uninstall main policy"
             shellCleanUp
+            exit 0
         else
             echo 'Using the custom Homebrew uninstall script'
             # Download and run the custom Homebrew uninstall script for other installation paths
